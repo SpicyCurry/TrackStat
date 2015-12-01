@@ -1,0 +1,15 @@
+body
+{
+    background-color: #1B1B1B;
+    color: white;
+}
+h1
+{
+    color: #999999;
+    font-size: 80;
+}
+
+a:link    {color:#777777; background-color:transparent; text-decoration:underline}
+a:visited {color:#777777; background-color:transparent; text-decoration:underline}
+a:hover   {color:#7BB036; background-color:transparent; text-decoration:underline}
+a:active  {color:#7BB036; background-color:transparent; text-decoration:underline}
