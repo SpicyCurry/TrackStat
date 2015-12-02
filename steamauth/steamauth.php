@@ -1,7 +1,7 @@
 <?php
 ob_start();
 session_start();
-require ('openid.php');
+require('openid.php');
 
 function logoutbutton() {
     echo "<form action=\"steamauth/logout.php\" method=\"post\"><input value=\"Logout\" type=\"submit\" /></form>"; //logout button

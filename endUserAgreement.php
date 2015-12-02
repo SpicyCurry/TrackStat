@@ -1,10 +1,15 @@
-<!DOCTYPE html>
+<?php
+
+include ('header.html');
+?>
+
 <html>
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
 </head>
 <body>
+<header class="jumbotron hero-spacer"><div id="content" align="">
 <h2>End User Agreement</h2>
 These are the terms you as a user agree to by using our service.
 
@@ -21,9 +26,9 @@ These are the terms you as a user agree to by using our service.
     and that you will score some frags and pwn some n00bs</li>
 </ul>
 
-By using our service you agree to our End User Agreement, as well as our <a href ="privacy.html">Privacy Policy</a>
+By using our service you agree to our End User Agreement, as well as our <a href ="privacy.php">Privacy Policy</a>
 
-
-
+</div>
+</header>
 </body>
 </html>

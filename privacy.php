@@ -1,10 +1,15 @@
-<!DOCTYPE html>
+<?php
+
+include ('header.html');
+
+?>
 <html>
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
 </head>
 <body>
+<header class="jumbotron hero-spacer"><div id="content" align="">
 <h2>Privacy Policy</h2>
 This privacy policy decrees how information about users is collected and used.
 <ul>
@@ -20,7 +25,8 @@ This privacy policy decrees how information about users is collected and used.
     <li>The data will be stored on a server located in Sweden.</li>
 </ul>
 
-By using our service you agree to our Privacy Policy, as well as our <a href ="endUserAgreement.html">End User Agreement</a>
-
+By using our service you agree to our Privacy Policy, as well as our <a href ="endUserAgreement.php">End User Agreement</a>
+</div>
+</header>
 </body>
 </html>
