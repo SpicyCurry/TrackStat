@@ -27,7 +27,9 @@ include ('header.html');
             echo $steamprofile['personaname']."<br>";
             echo "<img src='".$steamprofile['avatarmedium']."'><br>";
             echo "  <a href='steamauth/logout.php'>Log out</a>";
-            echo"</div>";
+            echo "</div>";
+            echo "<br><br>";
+            echo "<a href='database/user.php'> User </a>";
         }
         ?>
         <div><i>This page is powered by <a href="http://steampowered.com">Steam</a></i></div>

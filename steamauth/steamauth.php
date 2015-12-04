@@ -9,33 +9,34 @@ function logoutbutton() {
 
 function steamlogin()
 {
-try {
-    require("settings.php");
-    $openid = new LightOpenID($steamauth['domainname']);
+    try {
+        require("settings.php");
+        $openid = new LightOpenID($steamauth['domainname']);
 
-    $button['small'] = "small";
-    $button['large_no'] = "large_noborder";
-    $button['large'] = "large_border";
-    $button = $button[$steamauth['buttonstyle']];
-    
-    if(!$openid->mode) {
-        if(isset($_GET['login'])) {
-            $openid->identity = 'http://steamcommunity.com/openid';
-            header('Location: ' . $openid->authUrl());
+        $button['small'] = "small";
+        $button['large_no'] = "large_noborder";
+        $button['large'] = "large_border";
+        $button = $button[$steamauth['buttonstyle']];
+
+        if(!$openid->mode) {
+            if(isset($_GET['login'])) {
+                $openid->identity = 'http://steamcommunity.com/openid';
+                header('Location: ' . $openid->authUrl());
+            }
+
+            return "<form action=\"?login\" method=\"post\"> <input type=\"image\" src=\"http://cdn.steamcommunity.com/public/images/signinthroughsteam/sits_".$button.".png\"></form>";
         }
 
-    return "<form action=\"?login\" method=\"post\"> <input type=\"image\" src=\"http://cdn.steamcommunity.com/public/images/signinthroughsteam/sits_".$button.".png\"></form>";
-    }
+        elseif($openid->mode == 'cancel') {
+            echo 'User has canceled authentication!';
+        } else {
+            if($openid->validate()) {
 
-     elseif($openid->mode == 'cancel') {
-        echo 'User has canceled authentication!';
-    } else {
-        if($openid->validate()) { 
                 $id = $openid->identity;
                 $ptn = "/^http:\/\/steamcommunity\.com\/openid\/id\/(7[0-9]{15,25}+)$/";
                 preg_match($ptn, $id, $matches);
-              
-                $_SESSION['steamid'] = $matches[1]; 
+
+                $_SESSION['steamid'] = $matches[1];
 
                 // First determine of the $steamauth['loginpage'] has been set, if yes then redirect there. If not redirect to where they came from
                 if($steamauth['loginpage'] !== "") {
@@ -48,14 +49,14 @@ try {
                     if($returnTo === $_GET['openid_return_to']) $returnTo = str_replace('?login', '', $_GET['openid_return_to']);
                 }
                 header('Location: '.$returnTo);
-        } else {
+            } else {
                 echo "User is not logged in.\n";
-        }
+            }
 
+        }
+    } catch(ErrorException $e) {
+        echo $e->getMessage();
     }
-} catch(ErrorException $e) {
-    echo $e->getMessage();
-}
 }
 
 ?>
