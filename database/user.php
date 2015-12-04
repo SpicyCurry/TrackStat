@@ -5,7 +5,7 @@ checkUser();
 
 function checkUser()
 {
-    $mysqli = new mysqli("cloud-55.skelabb.ltu.se", "server", "10blowjobsfromAlex", 'TrackStatDB');
+    $mysqli = new mysqli("localhost", "server", "10blowjobsfromAlex", 'TrackStatDB');
 
     if ($mysqli->connect_errno)
     {
