@@ -1,7 +1,4 @@
 <?php
-session_start();
-
-checkUserPDO();
 
 function checkUserPDO()
 {
@@ -19,7 +16,6 @@ function checkUserPDO()
 			$updateStmt->bindparam(":ID", $ID);
 			$updateStmt->bindParam(":time", $time);
 			$updateStmt->execute();
-			var_dump("time");
 		}
 		else
 		{
@@ -27,7 +23,6 @@ function checkUserPDO()
 			$insertStmt->bindparam(":ID", $ID);
 			$insertStmt->bindParam(":time", $time);
 			$insertStmt->execute();
-			var_dump("user");
 		}
 
 	} catch (PDOException $e) {
