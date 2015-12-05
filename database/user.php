@@ -1,43 +1,39 @@
 <?php
 session_start();
 
-checkUser();
+checkUserPDO();
 
-function checkUser()
+function checkUserPDO()
 {
-    $mysqli = new mysqli("localhost", "server", "10blowjobsfromAlex", 'TrackStatDB');
+	$ID = $_SESSION["steam_steamid"];
+	$time = time();
+	try
+	{
+		$dbh = new PDO('mysql:host=localhost;dbname=TrackStatDB', "root", "");
+		$selectStmt =  $dbh->prepare("SELECT * FROM user WHERE SteamID64=:ID");
+		$selectStmt->bindParam(":ID", $ID);
+		$selectStmt->execute();
+		if ($selectStmt->rowCount() == 1)
+		{
+			$updateStmt = $dbh->prepare("UPDATE user SET LastLogin=:time WHERE SteamID64=:ID");
+			$updateStmt->bindparam(":ID", $ID);
+			$updateStmt->bindParam(":time", $time);
+			$updateStmt->execute();
+			var_dump("time");
+		}
+		else
+		{
+			$insertStmt = $dbh->prepare("INSERT INTO user (SteamID64, LastLogin) VALUES (:ID,:time)");
+			$insertStmt->bindparam(":ID", $ID);
+			$insertStmt->bindParam(":time", $time);
+			$insertStmt->execute();
+			var_dump("user");
+		}
 
-    if ($mysqli->connect_errno)
-    {
-        echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
-    }
+	} catch (PDOException $e) {
+		print "Error!: " . $e->getMessage() . "<br/>";
+		die();
+	}
 
-    $selectStmt = $mysqli->prepare("SELECT * FROM user WHERE SteamID64=?");
-    var_dump($selectStmt);
-    $ID = $_SESSION["steam_steamid"];
-    var_dump($ID);
-
-    $selectStmt->bind_param("s", $ID);
-    $selectStmt->execute();
-
-    $results = $selectStmt->get_result();
-    $selectStmt->close();
-    $time = time();
-    var_dump($time);
-
-    if ($results->num_rows > 0) {
-        $updateStmt = $mysqli->prepare("UPDATE user SET LastLogin=? WHERE SteamID64=?");
-        $updateStmt->bind_param("is", $time, $ID);
-        $updateStmt->execute();
-        $updateStmt->close();
-    } else {
-        $insertStmt = $mysqli->prepare("INSERT INTO user (SteamID64, LastLogin) VALUES (?,?)");
-        $insertStmt->bind_param("si", $ID, $time);
-        var_dump($_SESSION["steam_steamid"]);
-        $insertStmt->execute();
-        $insertStmt->close();
-    }
-
-    $mysqli->close();
-
+	$dbh = null;
 }
