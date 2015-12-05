@@ -4,8 +4,8 @@ $ID = $_SESSION["steam_steamid"];
 
 try
 {
-	$dbh = new PDO('mysql:host=localhost;dbname=TrackStatDB', "root", "");
-	$selectStmt =  $dbh->prepare("SELECT * FROM steam_data WHERE SteamID64=:ID");
+	$dbh = new PDO('mysql:host=localhost;dbname=TrackStatDB', "root", "vikhram");
+	$selectStmt =  $dbh->prepare("SELECT * FROM Steam_Data WHERE SteamID64=:ID");
 	$selectStmt->bindParam(":ID", $ID);
 	$selectStmt->execute();
 
