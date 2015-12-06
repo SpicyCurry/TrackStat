@@ -30,12 +30,11 @@ include ('header.html');
             echo "  <a href='steamauth/logout.php'>Log out</a>";
             echo "</div>";
             echo "<br><br>";
-            echo "<a href='database/user.php'> User </a>";
-	        echo "<canvas id='canvas' width='400' height='400''></canvas>";
-
-	        echo "<script src='/js/charting.js'> </script>";
+            echo "<canvas id='canvas' width='700' height='400''></canvas><br>";
+	        echo "<script src='/js/charting.js'></script>";
         }
         ?>
+
         <div><i>This page is powered by <a href="http://steampowered.com">Steam</a></i></div>
     </div>
     </p>
