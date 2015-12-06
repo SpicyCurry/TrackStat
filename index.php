@@ -33,7 +33,7 @@ include ('header.html');
             echo "<a href='database/user.php'> User </a>";
 	        echo "<canvas id='canvas' width='400' height='400''></canvas>";
 
-	        echo "<script src='/js/charting.js'> console.log('hej');hej()</script>";
+	        echo "<script src='/js/charting.js'> </script>";
         }
         ?>
         <div><i>This page is powered by <a href="http://steampowered.com">Steam</a></i></div>
