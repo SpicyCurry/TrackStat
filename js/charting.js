@@ -12,6 +12,8 @@ $.get("../database/getSteamData.php", function(data)
     var labels = [];
     var kills = [];
     var deaths= [];
+    
+    //PhpStorm will raise an error here, but it is a valid for statement and it compiles. Do not change "of" to "in"!
     for (var i of data)
     {
         labels.push(new Date(parseInt(i.TimeStamp)).getDate());
