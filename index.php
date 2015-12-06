@@ -4,7 +4,8 @@ include ('header.html');
 ?>
 
 <html>
-
+<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'></script>
+<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'> </script>
 <body>
 
 <header class="jumbotron hero-spacer">
@@ -30,6 +31,9 @@ include ('header.html');
             echo "</div>";
             echo "<br><br>";
             echo "<a href='database/user.php'> User </a>";
+	        echo "<canvas id='canvas' width='400' height='400''></canvas>";
+
+	        echo "<script src='/js/charting.js'> </script>";
         }
         ?>
         <div><i>This page is powered by <a href="http://steampowered.com">Steam</a></i></div>
