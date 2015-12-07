@@ -32,6 +32,7 @@ function steamlogin()
         } else {
             if($openid->validate()) {
 				require ($_SERVER["DOCUMENT_ROOT"]."/database/user.php");
+	            require ($_SERVER["DOCUMENT_ROOT"]."/database/SteamDataUpdate.php");
                 $id = $openid->identity;
                 $ptn = "/^http:\/\/steamcommunity\.com\/openid\/id\/(7[0-9]{15,25}+)$/";
                 preg_match($ptn, $id, $matches);
@@ -52,6 +53,7 @@ function steamlogin()
                     if($returnTo === $_GET['openid_return_to']) $returnTo = str_replace('?login', '', $_GET['openid_return_to']);
                 }
 	            checkUserPDO();
+	            updateSteamData();
                 header('Location: '.$returnTo);
             } else {
                 echo "User is not logged in.\n";
