@@ -2,14 +2,12 @@ var datasets ={};
 
 function getData(provider, stat)
 {
-	console.log("Tja");
 	if (datasets[provider]==null)
 	{
-		console.log("fetching new data");
 		$.ajax({
 			type: "GET",
 			url: "../database/getSteamData.php",
-			data: {provider: provider, stat: stat},
+			data: {provider: provider},
 			dataType: "json"
 		}).done(function (data)
 		{
@@ -23,7 +21,6 @@ function getData(provider, stat)
 	}
 	else
 	{
-		console.log("using stored data");
 		handleStat(datasets[provider], stat);
 	}
 }
@@ -33,10 +30,55 @@ function handleStat(dataset, stat)
 	switch (stat)
 	{
 		case "totalKills":
-			result = extractDateData(dataset, stat);
-
+			var result = extractDateData(dataset, stat);
 			createLineChart(result[0], [result[1]]);
+			break;
+		case "totalKillsVtotalDeaths":
+			var resultKills = extractDateData(dataset, "totalKills");
+			var resultDeaths = extractDateData(dataset, "totalDeaths");
+			var input = [resultKills[1], resultDeaths[1]];
+			createLineChart(resultKills[0], input);
+			break;
+		case "K/D":
+			var resultKills = extractDateData(dataset, "totalKills");
+			var resultDeaths = extractDateData(dataset, "totalDeaths");
+			var deltaKills = getDelta(resultKills[1]);
+			var deltaDeaths = getDelta(resultDeaths[1]);
+			var label = resultKills[0];
+			var resultKD = [];
+			if (label.length > 0)
+			{
+				label.shift();
+				for (var i = 0; i < deltaKills.length; i++)
+				{
+					resultKD.push(deltaKills[i] / deltaDeaths[i]);
+				}
+			}
+			createLineChart(label, [resultKD]);
+			break;
+		case "deltaKills":
+			var result = extractDateData(dataset, "totalKills");
+			var deltaKills = getDelta(result[1]);
+			if (result[0].length > 0)
+			{
+				result[0].shift();
+			}
+			createLineChart(result[0], [deltaKills]);
 	}
+}
+
+function getDelta(dataArray)
+{
+	var result = [];
+	for (var i = 0; i < dataArray.length; i++)
+	{
+		if (i == 0)
+		{
+			continue;
+		}
+		result.push(dataArray[i] - dataArray[i-1])
+	}
+	return result;
 }
 
 function extractDateData(dataset, stat)
@@ -52,13 +94,16 @@ function extractDateData(dataset, stat)
 	return [labels, datapoints];
 }
 
-function createLineChart(labels, data)
+function createLineChart(labels, dataArrayArray)
 {
-	context = $("#canvas").get(0).getContext("2d");
-	if (labels == 0)
+	$("#canvas").remove();
+	$('#canvasContainer').append('<canvas id="canvas" width="700" height="400"><canvas>'); //ChartJS is bugged. Need to destroy canvas completely to draw anew.
+	$canvas = $("#canvas");
+	context = $canvas.get(0).getContext("2d");
+	if (labels.length == 0)
 	{
 		context.font = "30px Arial";
-		context.fillText("Data Missing", 100, 100);
+		context.fillText("Data Missing", 250, 100);
 		return;
 	}
 	if (labels == 1)
@@ -66,30 +111,29 @@ function createLineChart(labels, data)
 		labels.push(labels[0]);
 	}
 
-	var i = 0;
 	dataset =[];
-	while (i < data.length)
+	for (var i = 0; i < dataArrayArray.length; i++)
 	{
-		if (data[i].length == 0)
+		if (dataArrayArray[i].length == 0)
 		{
 			context.font = "30px Arial";
-			context.fillText("Data Missing", 100, 100);
+			context.fillText("Data Missing", 250, 100);
 			return;
 		}
-		if (data[i].length == 1)
+		if (dataArrayArray[i].length == 1)
 		{
-			data.push(datapoints[0]);
+			dataArrayArray.push(datapoints[0]);
 		}
 		var colour;
 		switch (i)
 		{
-			case 0: colour = "rgba (220, 0, 0, 0.2)";
+			case 0: colour = "rgba(0,0,220,0.2)";
 				break;
-			case 1: colour = "rgba (0, 220, 0, 0.2)";
+			case 1: colour = "rgba(220,0,0,0.2)";
 				break;
-			case 2: colour = "rgba (0, 0, 220, 0.2)";
+			case 2: colour = "rgba(0,220,0,0.2)";
 				break;
-			default: colour = "rgba ("+String(Math.random()*255)+","+String(Math.random()*255)+","+String(Math.random()*255)+", 0.2)";
+			default: colour = "rgba("+String(Math.random()*255)+","+String(Math.random()*255)+","+String(Math.random()*255)+",0.2)";
 		}
 
 		var obj =
@@ -101,18 +145,16 @@ function createLineChart(labels, data)
 			pointStrokeColor: "#fff",
 			pointHighlightFill: "#fff",
 			pointHighlightStroke: colour,
-			data: data[i]
+			data: dataArrayArray[i]
 		}
-
 		dataset.push(obj);
-
-		i++;
 	}
 	var graphData =
 	{
 		labels: labels,
 		datasets: dataset
 	};
+	context.clearRect(0,0, $canvas.width, $canvas.height);
 	var chart = new Chart(context).Line(graphData, {bezierCurve: false});
 
 }

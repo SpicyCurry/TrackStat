@@ -11,21 +11,17 @@ function updateSteamData()
 	$time = time();
 
 	$ch = curl_init();
-
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
 	curl_setopt($ch, CURLOPT_URL, $url . $key . $ID_full);
-
 	$result = curl_exec($ch);
-
 	curl_close($ch);
+
 	$stat_array = json_decode($result, true)["playerstats"]["stats"];
 
 	$total_kills = $stat_array["0"]["value"];
 	$total_death = $stat_array["1"]["value"];
 	$total_time_played = $stat_array["2"]["value"];
 	$total_matches_won = $stat_array["127"]["value"];
-
 
 	try
 	{
@@ -44,7 +40,6 @@ function updateSteamData()
 		{
 			echo "Failed!";
 		}
-
 
 	} catch (PDOException $e) {
 		print "Error!: " . $e->getMessage() . "<br/>";
