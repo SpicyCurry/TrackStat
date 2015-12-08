@@ -4,6 +4,7 @@ $ID = $_SESSION["steam_steamid"];
 $provider = $_GET["provider"];
 try
 {
+
 	$dbh = new PDO('mysql:host=localhost;dbname=TrackStatDB', "root", "");
 	$selectStmt =  $dbh->prepare("SELECT * FROM ".$provider."_data WHERE SteamID64=:ID");
 //	^ MAJOR SECURITY LEAK! ^ Will fix later (maybe).

@@ -135,7 +135,6 @@ function createLineChart(labels, dataArrayArray)
 				break;
 			default: colour = "rgba("+String(Math.random()*255)+","+String(Math.random()*255)+","+String(Math.random()*255)+",0.2)";
 		}
-
 		var obj =
 		{
 			label: "Data",

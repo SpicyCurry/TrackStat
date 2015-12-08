@@ -1,4 +1,5 @@
 <?php
+
 function updateSteamData()
 {
 	session_start();
