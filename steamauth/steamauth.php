@@ -31,7 +31,8 @@ function steamlogin()
             echo 'User has canceled authentication!';
         } else {
             if($openid->validate()) {
-
+				require ($_SERVER["DOCUMENT_ROOT"]."/database/user.php");
+	            require ($_SERVER["DOCUMENT_ROOT"]."/database/SteamDataUpdate.php");
                 $id = $openid->identity;
                 $ptn = "/^http:\/\/steamcommunity\.com\/openid\/id\/(7[0-9]{15,25}+)$/";
                 preg_match($ptn, $id, $matches);
@@ -39,15 +40,20 @@ function steamlogin()
                 $_SESSION['steamid'] = $matches[1];
 
                 // First determine of the $steamauth['loginpage'] has been set, if yes then redirect there. If not redirect to where they came from
-                if($steamauth['loginpage'] !== "") {
+                if($steamauth['loginpage'] !== "")
+                {
                     $returnTo = $steamauth['loginpage'];
-                } else {
+                }
+                else
+                {
                     //Determine the return to page. We substract "login&"" to remove the login var from the URL.
                     //"file.php?login&foo=bar" would become "file.php?foo=bar"
                     $returnTo = str_replace('login&', '', $_GET['openid_return_to']);
                     //If it didn't change anything, it means that there's no additionals vars, so remove the login var so that we don't get redirected to Steam over and over.
                     if($returnTo === $_GET['openid_return_to']) $returnTo = str_replace('?login', '', $_GET['openid_return_to']);
                 }
+	            checkUserPDO();
+	            updateSteamData();
                 header('Location: '.$returnTo);
             } else {
                 echo "User is not logged in.\n";
