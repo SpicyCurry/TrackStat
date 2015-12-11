@@ -64,7 +64,26 @@ function handleStat(dataset, stat)
 				result[0].shift();
 			}
 			createLineChart(result[0], [deltaKills]);
+            break;
+        case "totalMvps":
+            var mvps = extractDateData(dataset, "totalMvps");
+            drawData(mvps[1][mvps[1].length-1]);
+            break;
+        default:
+            var newStat = stat.substr(0,3);
+            var weapon = stat.substr(3,stat.length-1);
+            switch(newStat){
+                case "acc":
+                    var totalshots = extractDateData(dataset,"total_shots_"+weapon);
+                    var totalhits = extractDateData(dataset,"total_hits_"+weapon);
+                    var acc = totalhits/totalshots;
+                    drawData(acc);
+                    break;
+
+            }
 	}
+
+
 }
 
 function getDelta(dataArray)
@@ -122,7 +141,7 @@ function createLineChart(labels, dataArrayArray)
 		}
 		if (dataArrayArray[i].length == 1)
 		{
-			dataArrayArray.push(datapoints[0]);
+			dataArrayArray[i].push(dataArrayArray[i][0]);
 		}
 		var colour;
 		switch (i)
@@ -155,5 +174,27 @@ function createLineChart(labels, dataArrayArray)
 	};
 	context.clearRect(0,0, $canvas.width, $canvas.height);
 	var chart = new Chart(context).Line(graphData, {bezierCurve: false});
+
+}
+
+
+function drawData(number) {
+    $("#canvas").remove();
+    $('#canvasContainer').append('<canvas id="canvas" width="700" height="400"><canvas>'); //ChartJS is bugged. Need to destroy canvas completely to draw anew.
+    $canvas = $("#canvas");
+    context = $canvas.get(0).getContext("2d");
+
+
+    if(number == null){
+        context.font = "30px Arial";
+        context.fillText("Data Missing", 250, 100);
+        return;
+
+    }
+
+    context.font = "30px Arial";
+    context.fillText(number, 250, 100);
+
+
 
 }
