@@ -122,7 +122,7 @@ function createLineChart(labels, dataArrayArray)
 		}
 		if (dataArrayArray[i].length == 1)
 		{
-			dataArrayArray.push(datapoints[0]);
+			dataArrayArray.push(dataArrayArray[0]);
 		}
 		var colour;
 		switch (i)
