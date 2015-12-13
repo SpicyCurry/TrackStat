@@ -18,9 +18,14 @@ function updateSteamData()
 	$result = curl_exec($ch);
 	curl_close($ch);
 
-	$stat_json = json_encode(json_decode($result, true)["playerstats"]["stats"], JSON_PRETTY_PRINT);
 
-	var_dump($stat_json);
+	$stat_array = json_decode($result, true)["playerstats"]["stats"];
+	$stat_json = [];
+	foreach ($stat_array as $i)
+	{
+		$stat_json[$i["name"]]=$i["value"];
+	}
+	$stat_json = json_encode($stat_json, JSON_PRETTY_PRINT);
 
 	try
 	{

@@ -1,17 +1,24 @@
 <?php
 session_start();
 $ID = $_SESSION["steam_steamid"];
-$provider = $_GET["provider"];
 try
 {
 	$dbh = new PDO('mysql:host=localhost;dbname=TrackStatDB', "root", "");
-	$selectStmt =  $dbh->prepare("SELECT * FROM steam_data WHERE SteamID64=:ID");
-//	^ MAJOR SECURITY LEAK! ^ Will fix later (maybe).
-//  $selectStmt->bindParam(":provider", $provider);
+
+	$selectStmt =  $dbh->prepare("SELECT TimeStamp, json FROM steam_data WHERE SteamID64=:ID");
 	$selectStmt->bindParam(":ID", $ID);
 	$selectStmt->execute();
 
-	print(json_encode($selectStmt->fetchAll(PDO::FETCH_ASSOC), JSON_PRETTY_PRINT));
+	$selectStmt->bindColumn("TimeStamp",$timestamp);
+	$selectStmt->bindColumn("json", $json);
+	$resultArray = [];
+	while($selectStmt->fetch())
+	{
+		$temp = json_decode($json, PDO::FETCH_ASSOC);
+		$temp["TimeStamp"] = $timestamp;
+		array_push($resultArray,$temp);
+	}
+	print(json_encode($resultArray, JSON_PRETTY_PRINT));
 
 
 } catch (PDOException $e)
