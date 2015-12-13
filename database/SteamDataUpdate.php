@@ -1,4 +1,5 @@
 <?php
+updateSteamData();
 function updateSteamData()
 {
 	session_start();
@@ -17,22 +18,21 @@ function updateSteamData()
 	curl_close($ch);
 
 	$stat_array = json_decode($result, true)["playerstats"]["stats"];
+	$stat_json = [];
+	foreach ($stat_array as $i)
+	{
+		$stat_json[$i["name"]]=$i["value"];
+	}
+	$stat_json = json_encode($stat_json, JSON_PRETTY_PRINT);
 
-	$total_kills = $stat_array["0"]["value"];
-	$total_death = $stat_array["1"]["value"];
-	$total_time_played = $stat_array["2"]["value"];
-	$total_matches_won = $stat_array["127"]["value"];
 
 	try
 	{
 		$dbh = new PDO('mysql:host=localhost;dbname=TrackStatDB', "root", "");
-		$insertStmt = $dbh->prepare("INSERT INTO steam_data(SteamID64, TimeStamp, totalKills, totalDeaths, totalTimePlayed, totalMatchesWon) VALUES (:ID, :TimeStamp, :totalKills, :totalDeaths, :totalTimePlayed, :totalMatchesWon)");
+		$insertStmt = $dbh->prepare("INSERT INTO steam_data(SteamID64, TimeStamp, json) VALUES (:ID, :TimeStamp, :json)");
 		$insertStmt->bindParam(":ID", $ID);
 		$insertStmt->bindParam(":TimeStamp", $time);
-		$insertStmt->bindParam(":totalKills", $total_kills);
-		$insertStmt->bindParam(":totalDeaths", $total_death);
-		$insertStmt->bindParam(":totalTimePlayed", $total_time_played);
-		$insertStmt->bindParam(":totalMatchesWon", $total_matches_won);
+		$insertStmt->bindParam(":json", $stat_json);
 		if ($insertStmt->execute())
 		{
 			echo "Okay!";

@@ -29,35 +29,49 @@ function handleStat(dataset, stat)
 {
 	switch (stat)
 	{
-		case "totalKills":
+		case "total_kills":
 			var result = extractDateData(dataset, stat);
 			createLineChart(result[0], [result[1]]);
 			break;
-		case "totalKillsVtotalDeaths":
-			var resultKills = extractDateData(dataset, "totalKills");
-			var resultDeaths = extractDateData(dataset, "totalDeaths");
+		case "total_kills/total_deaths":
+			var resultKills = extractDateData(dataset, "total_kills");
+			var resultDeaths = extractDateData(dataset, "total_deaths");
 			var input = [resultKills[1], resultDeaths[1]];
 			createLineChart(resultKills[0], input);
 			break;
 		case "K/D":
-			var resultKills = extractDateData(dataset, "totalKills");
-			var resultDeaths = extractDateData(dataset, "totalDeaths");
+			var resultKills = extractDateData(dataset, "total_kills");
+			var resultDeaths = extractDateData(dataset, "total_deaths");
 			var deltaKills = getDelta(resultKills[1]);
 			var deltaDeaths = getDelta(resultDeaths[1]);
 			var label = resultKills[0];
 			var resultKD = [];
 			if (label.length > 0)
 			{
-				label.shift();
+				label.shift();  //getDelta already shifted the data once.
 				for (var i = 0; i < deltaKills.length; i++)
 				{
-					resultKD.push(deltaKills[i] / deltaDeaths[i]);
+					if (deltaDeaths[i] == 0)
+					{
+						if (deltaKills == 0)
+						{
+							resultKD.push(0);
+						}
+						else
+						{
+							resultKD.push(99999)
+						}
+					}
+					else
+					{
+						resultKD.push(deltaKills[i] / deltaDeaths[i]);
+					}
 				}
 			}
 			createLineChart(label, [resultKD]);
 			break;
-		case "deltaKills":
-			var result = extractDateData(dataset, "totalKills");
+		case "delta_kills":
+			var result = extractDateData(dataset, "total_kills");
 			var deltaKills = getDelta(result[1]);
 			if (result[0].length > 0)
 			{
@@ -122,7 +136,7 @@ function createLineChart(labels, dataArrayArray)
 		}
 		if (dataArrayArray[i].length == 1)
 		{
-			dataArrayArray.push(datapoints[0]);
+			dataArrayArray[i].push(dataArrayArray[i][0]);
 		}
 		var colour;
 		switch (i)
