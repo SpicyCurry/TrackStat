@@ -1,12 +1,11 @@
 <?php
-// GET: Map, Json Teams, Key
+// GET: Map, Json Teams, Key, timestamp
 
-if (isset($_GET["key"])&&isset($_GET["teams"])&&isset($_GET["map"]))
+if (isset($_GET["key"])&&isset($_GET["teams"])&&isset($_GET["map"])&&isset($_GET["timeStamp"]))
 {
 	include "checkProvider.php";
 	if (checkKey($_GET["key"]))
 	{
-		$time = time();
 		$teamNames = [0=>"CT", 1=>"T"];
 		$teams = json_decode($_GET["teams"], true);
 		try
@@ -31,6 +30,12 @@ if (isset($_GET["key"])&&isset($_GET["teams"])&&isset($_GET["map"]))
 			$insertPlayerStmt->bindParam(":teamID", $teamID);
 			$insertPlayerStmt->bindParam(":ID", $ID);
 
+			$findProviderStmt = $dbh->prepare("SELECT * FROM `user_has_provider` WHERE user_SteamID64=:ID");
+			$findProviderStmt->bindParam(":ID", $ID);
+
+			$insertProviderStmt = $dbh->prepare("INSERT INTO `user_has_provider` (Provider_ProviderID, user_SteamID64) SELECT ProviderID, :ID FROM `provider` WHERE `key`=:key");
+			$insertProviderStmt->bindParam(":ID", $ID);
+			$insertProviderStmt->bindParam(":key", $_GET["key"]);
 
 			foreach ($teamNames as $name)
 			{
@@ -39,20 +44,22 @@ if (isset($_GET["key"])&&isset($_GET["teams"])&&isset($_GET["map"]))
 				{
 					$ID = $playerID;
 					$findPlayerStmt->execute();
-					if ($findPlayerStmt->rowCount() == 1)
-					{
-						$insertPlayerStmt->execute();
-					}
-					else
+					if ($findPlayerStmt->rowCount() == 0)
 					{
 						$addPlayerStmt->execute();
-						$insertPlayerStmt->execute();
+					}
+					$insertPlayerStmt->execute();
+
+					$findProviderStmt->execute();
+					if ($findProviderStmt->rowCount()==0)
+					{
+						$insertProviderStmt->execute();
 					}
 				}
 			}
 
 			$matchStmt = $dbh->prepare("INSERT INTO `match` (TimeStamp, Map, TeamID_1, TeamID_2, Provider_key) VALUES (:time, :map, :teamID1, :teamID2, :key)");
-			$matchStmt->bindParam(":time", $time);
+			$matchStmt->bindParam(":time", $_GET["timeStamp"]);
 			$matchStmt->bindParam(":map", $_GET["map"]);
 			$matchStmt->bindParam(":teamID1", $CTID);
 			$matchStmt->bindParam(":teamdID2", $TID);

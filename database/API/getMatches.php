@@ -1,7 +1,7 @@
 <?php
 session_start();
-$ID = $_SESSION["steam_steamid"];
-$providerKey = 1234;
+$ID = $_GET["steamID"];
+$providerID = $_GET["providerID"];
 try
 {
 	$dbh = new PDO('mysql:host=localhost;dbname=TrackStatDB', "root", "");
@@ -39,9 +39,11 @@ INNER JOIN `match`
 ON `team_has_user`.TeamID=`match`.TeamID_1 OR `team_has_user`.TeamID=`match`.TeamID_2
 INNER JOIN `matchend`
 ON `match`.MatchID=`matchend`.MatchID
-WHERE SteamID64 =:ID AND Provider_Key =:providerKey");
+INNER JOIN `provider`
+ON `provider`.key = `match`.Provider_Key
+WHERE SteamID64 =:ID AND ProviderID =:providerID");
 	$matchesStmt->bindParam(":ID", $ID);
-	$matchesStmt->bindParam(":providerKey", $providerKey);
+	$matchesStmt->bindParam(":providerID", $providerID);
 	$matchesStmt->execute();
 	$array = [];
 	while ($result = $matchesStmt->fetch(PDO::FETCH_ASSOC))
