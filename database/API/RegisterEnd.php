@@ -1,3 +1,27 @@
 <?php
-$a = ["CT"=>[0=>"123",1=>"234"], "T"=>[0=>"123", 1=>"234"]];
-print json_encode($a, JSON_PRETTY_PRINT);
+
+if (isset($_GET["timeStamp"]) && isset($_GET["matchID"]) && isset($_GET["key"]))
+{
+	include "checkProvider.php";
+	if (checkKey($_GET["key"]))
+	{
+		try
+		{
+			$dbh = new PDO('mysql:host=localhost;dbname=TrackStatDB', "root", "");
+
+			$endStmt = $dbh->prepare("INSERT INTO `matchend` (TimeStamp, MatchID) VALUES (:end, :matchID)");
+			$endStmt->bindParam(":end", $_GET["timeStamp"]);
+			$endStmt->bindParam(":matchID", $matchID);
+
+		} catch (PDOException $e)
+		{
+			print "Error!: " . $e->getMessage() . "<br/>";
+			die();
+		}
+		$dbh = null;
+	}
+}
+
+
+// Security leak. Anyone with a valid provider key can register a matchend
+// to any unended match by guessing their ID (which is AI, so can be easy)
