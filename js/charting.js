@@ -6,7 +6,7 @@ function getData(provider, stat)
 	{
 		$.ajax({
 			type: "GET",
-			url: "../database/getSteamData.php",
+			url: "../database/API/getSteamData.php",
 			data: {provider: provider},
 			dataType: "json"
 		}).done(function (data)

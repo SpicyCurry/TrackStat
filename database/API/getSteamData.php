@@ -14,7 +14,7 @@ try
 	$resultArray = [];
 	while($selectStmt->fetch())
 	{
-		$temp = json_decode($json, PDO::FETCH_ASSOC);
+		$temp = json_decode($json, PDO::FETCH_ASSOC); //Wtf PDO::FETCH_ASSOC here?
 		$temp["TimeStamp"] = $timestamp;
 		array_push($resultArray,$temp);
 	}
