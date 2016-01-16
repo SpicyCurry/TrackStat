@@ -1,6 +1,6 @@
 <?php
 
-if ((isset($_GET["time"])&&isset($_GET["winningSide"])&&isset($_GET["matchID"])&&isset($_GET["winningTeamID"])&&isset($_GET["MVPID"])&&isset($_GET["key"]))|| (isset($_GET["json"])&&isset($_GET["key"])))
+if ((isset($_GET["timeStamp"])&&isset($_GET["winningSide"])&&isset($_GET["matchID"])&&isset($_GET["winningTeamID"])&&isset($_GET["MVPID"])&&isset($_GET["key"]))|| (isset($_GET["json"])&&isset($_GET["key"])))
 {
 	include "checkProvider.php";
 	if (checkKey($_GET["key"]))
@@ -22,7 +22,7 @@ if ((isset($_GET["time"])&&isset($_GET["winningSide"])&&isset($_GET["matchID"])&
 			$roundStmt->bindParam(":winningID", $argument["winningID"]);
 			$roundStmt->bindParam(":matchID", $argument["matchID"]);
 			$roundStmt->bindParam(":MVPID", $argument["MVPID"]);
-			$roundStmt->bindParam(":time", $argument["time"]);
+			$roundStmt->bindParam(":time", $argument["timeStamp"]);
 			$roundStmt->bindParam(":key", $_GET["key"]);
 
 			print($roundStmt->execute());

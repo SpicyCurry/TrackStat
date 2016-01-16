@@ -34,13 +34,7 @@ function updateSteamData()
 		$insertStmt->bindParam(":ID", $ID);
 		$insertStmt->bindParam(":TimeStamp", $time);
 		$insertStmt->bindParam(":json", $stat_json);
-		if ($insertStmt->execute())
-		{
-			echo "Okay!";
-		} else
-		{
-			echo "Failed!";
-		}
+		$insertStmt->execute();
 
 	} catch (PDOException $e) {
 		print "Error!: " . $e->getMessage() . "<br/>";

@@ -19,8 +19,9 @@ if (isset($_GET["steamID"]))
 			$temp["TimeStamp"] = $timestamp;
 			array_push($resultArray, $temp);
 		}
+		print "<pre>";
 		print(json_encode($resultArray, JSON_PRETTY_PRINT));
-
+		print "</pre>";
 
 	} catch (PDOException $e)
 	{

@@ -82,7 +82,7 @@ if (isset($_GET["key"])&&isset($_GET["teams"])&&isset($_GET["map"])&&isset($_GET
 				foreach ($roundsArray as $round)
 				{
 					$winnigSide = $round["winningSide"];
-					$winningID = $round["winningID"];
+					$winningID = (($round["winningID"] == 1)?  $CTID : $TID);
 					$MVPID = $round["MVPID"];
 					$timeStamp = $round["timeStamp"];
 					$roundStmt->execute();
@@ -129,7 +129,10 @@ if (isset($_GET["key"])&&isset($_GET["teams"])&&isset($_GET["map"])&&isset($_GET
 			}
 			else
 			{
-				print $matchID;
+				$json = ["matchID"=>$matchID, "CTID"=>$CTID, "TID"=>$TID];
+				print "<pre>";
+				print json_encode($json, JSON_PRETTY_PRINT);
+				print "</pre>";
 			}
 		} catch (PDOException $e)
 		{
