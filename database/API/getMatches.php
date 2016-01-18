@@ -5,7 +5,7 @@ if (isset($_GET["steamID"]) && isset($_GET["providerID"]))
 	$providerID = $_GET["providerID"];
 	try
 	{
-		$dbh = new PDO('mysql:host=localhost;dbname=TrackStatDB', "root", "vikhram");
+		$dbh = new PDO('mysql:host=localhost;dbname=trackstatdb', "root", "vikhram");
 
 		$teamStmt = $dbh->prepare("SELECT SteamID64 FROM `team_has_user` WHERE `TeamID`=:TeamID");
 		$teamStmt->bindParam(":TeamID", $teamID);

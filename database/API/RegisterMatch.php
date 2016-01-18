@@ -13,7 +13,7 @@ if (isset($_GET["key"])&&isset($_GET["teams"])&&isset($_GET["map"])&&isset($_GET
 		{
 			try
 			{
-				$dbh = new PDO('mysql:host=localhost;dbname=TrackStatDB', "root", "vikhram");
+				$dbh = new PDO('mysql:host=localhost;dbname=trackstatdb', "root", "vikhram");
 
 				$teamStmt = $dbh->prepare("INSERT INTO `team`(`Provider_key`) VALUES  (:key)");
 				$teamStmt->bindParam(":key", $_GET["key"]);

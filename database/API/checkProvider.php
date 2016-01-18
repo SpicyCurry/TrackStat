@@ -3,7 +3,7 @@ function checkKey($key)
 {
 	try
 	{
-		$dbh = new PDO('mysql:host=localhost;dbname=TrackStatDB', "root", "vikhram");
+		$dbh = new PDO('mysql:host=localhost;dbname=trackstatdb', "root", "vikhram");
 
 		$selectStmt = $dbh->prepare("SELECT * FROM `provider` WHERE `key` =:key");
 		$selectStmt->bindParam(":key", $key);

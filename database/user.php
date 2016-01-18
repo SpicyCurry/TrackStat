@@ -6,7 +6,7 @@ function checkUserPDO()
 	$time = time();
 	try
 	{
-		$dbh = new PDO('mysql:host=localhost;dbname=TrackStatDB', "root", "vikhram");
+		$dbh = new PDO('mysql:host=localhost;dbname=trackstatdb', "root", "vikhram");
 		$selectStmt =  $dbh->prepare("SELECT * FROM User WHERE SteamID64=:ID");
 		$selectStmt->bindParam(":ID", $ID);
 		$selectStmt->execute();

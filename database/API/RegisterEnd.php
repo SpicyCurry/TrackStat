@@ -7,7 +7,7 @@ if (isset($_GET["timeStamp"]) && isset($_GET["matchID"]) && isset($_GET["key"]))
 	{
 		try
 		{
-			$dbh = new PDO('mysql:host=localhost;dbname=TrackStatDB', "root", "vikhram");
+			$dbh = new PDO('mysql:host=localhost;dbname=trackstatdb', "root", "vikhram");
 
 			$endStmt = $dbh->prepare("INSERT INTO `matchend` (TimeStamp, MatchID) VALUES (:end, :matchID)");
 			$endStmt->bindParam(":end", $_GET["timeStamp"]);

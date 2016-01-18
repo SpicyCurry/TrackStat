@@ -14,7 +14,7 @@ if ((isset($_GET["steamID"])&&  isset($_GET["timeStamp"])&&isset($_GET["matchID"
 		}
 		try
 		{
-			$dbh = new PDO('mysql:host=localhost;dbname=TrackStatDB', "root", "vikhram");
+			$dbh = new PDO('mysql:host=localhost;dbname=trackstatdb', "root", "vikhram");
 
 			$suicideStmt = $dbh->prepare("INSERT INTO `suicide` (MatchID, SteamID64, TimeStamp, Provider_key) VALUES (:matchID, :ID, :timeStamp, :key)");
 			$suicideStmt->bindParam(":matchID", $argument["matchID"]);
