@@ -6,7 +6,7 @@ if (isset($_GET["steamID"]))
 	{
 		$dbh = new PDO('mysql:host=localhost;dbname=TrackStatDB', "root", "");
 
-		$findProviderStmt = $dbh->prepare("SELECT Provider_ProviderID FROM `user_has_provider` WHERE user_SteamID64=:ID");
+		$findProviderStmt = $dbh->prepare("SELECT ProviderID, ProviderName FROM `user_has_provider` INNER JOIN provider ON provider.ProviderID = user_has_provider.Provider_ProviderID WHERE user_SteamID64=:ID");
 		$findProviderStmt->bindParam(":ID", $_GET["steamID"]);
 		$findProviderStmt->execute();
 		$temp = $findProviderStmt->fetchAll(PDO::FETCH_NUM);
@@ -25,5 +25,8 @@ if (isset($_GET["steamID"]))
 		die();
 	}
 	$dbh = null;
-
+}
+else
+{
+	print "Invalid arguments";
 }

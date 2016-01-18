@@ -16,7 +16,6 @@ if ((isset($_GET["killerID"])&& isset($_GET["killedID"]) && isset($_GET["timeSta
 		try
 		{
 			$dbh = new PDO('mysql:host=localhost;dbname=TrackStatDB', "root", "");
-
 			$killStmt = $dbh->prepare("INSERT INTO `kills` (SteamID64_Killer, SteamID64_Killed, TimeStamp, MatchID, Weapon, Provider_key) VALUES (:killerID, :killedID, :timeStamp, :matchID, :weapon, :key)");
 			$killStmt->bindParam(":killerID", $argument["killerID"]);
 			$killStmt->bindParam(":killedID", $argument["killedID"]);
@@ -24,7 +23,9 @@ if ((isset($_GET["killerID"])&& isset($_GET["killedID"]) && isset($_GET["timeSta
 			$killStmt->bindParam(":matchID", $argument["matchID"]);
 			$killStmt->bindParam(":weapon", $argument["weapon"]);
 			$killStmt->bindParam(":key", $_GET["key"]);
-			print($killStmt->execute());
+			$killStmt->execute();
+
+			print "done";
 		} catch (PDOException $e)
 		{
 			print "Error!: " . $e->getMessage() . "<br/>";
@@ -32,4 +33,12 @@ if ((isset($_GET["killerID"])&& isset($_GET["killedID"]) && isset($_GET["timeSta
 		}
 		$dbh = null;
 	}
+	else
+	{
+		print "Invalid key";
+	}
+}
+else
+{
+	print "Invalid arguments";
 }

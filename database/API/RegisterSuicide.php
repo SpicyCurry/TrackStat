@@ -1,6 +1,5 @@
 <?php
-
-if ((isset($_GET["ID"])&&  isset($_GET["timeStamp"])&&isset($_GET["matchID"])&& isset($_GET["key"]))|| (isset($_GET["json"])&&isset($_GET["key"])))
+if ((isset($_GET["steamID"])&&  isset($_GET["timeStamp"])&&isset($_GET["matchID"])&& isset($_GET["key"]))|| (isset($_GET["json"])&&isset($_GET["key"])))
 {
 	include "checkProvider.php";
 	if (checkKey($_GET["key"]))
@@ -19,11 +18,13 @@ if ((isset($_GET["ID"])&&  isset($_GET["timeStamp"])&&isset($_GET["matchID"])&& 
 
 			$suicideStmt = $dbh->prepare("INSERT INTO `suicide` (MatchID, SteamID64, TimeStamp, Provider_key) VALUES (:matchID, :ID, :timeStamp, :key)");
 			$suicideStmt->bindParam(":matchID", $argument["matchID"]);
-			$suicideStmt->bindParam(":ID", $argument["ID"]);
+			$suicideStmt->bindParam(":ID", $argument["steamID"]);
 			$suicideStmt->bindParam(":timeStamp", $argument["timeStamp"]);
 			$suicideStmt->bindParam(":key", $_GET["key"]);
 
-			print($killStmt->execute());
+			$suicideStmt->execute();
+
+			print "done";
 		} catch (PDOException $e)
 		{
 			print "Error!: " . $e->getMessage() . "<br/>";
@@ -31,4 +32,12 @@ if ((isset($_GET["ID"])&&  isset($_GET["timeStamp"])&&isset($_GET["matchID"])&& 
 		}
 		$dbh = null;
 	}
+	else
+	{
+		print "Invalid key";
+	}
+}
+else
+{
+	print "Invalid arguments";
 }

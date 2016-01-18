@@ -24,6 +24,10 @@
     <li>/database/API/RegisterEnd.php</li>
 </ul>
 
+A test user with steamID = 1 has been created ahead of time, with mock data.
+<br>
+A test provider with key = 1234 and proivderID = 4295 has been created ahead of time, with mock data.
+
 <!-- --------------------------- PROVIDERS ----------------- -->
 
 <h2>getProviders</h2>
@@ -86,6 +90,10 @@
     Use 2 is intended to be used to register a concluded match, and requires all the information regarding the match to be provided at once, while not returning a matchID.
     This means real time updates are not possible but require less resourses and fewer API calls. The use cases are mutually exclusive, i.e. you can only pick one for a given match!<br>
 
+    <br>
+    Any players defined in the teams not yet existing in our database will be added automatically.
+    <br><br>
+
     <b> Note:</b> in Use 2, the team ID's (as administered by the server) can not be provided beforehand. Therefore CT team will have the temporary ID of 1, and T the temporary ID of 2.
     The server will sort this out when the data is recieved.
 </div>
@@ -98,11 +106,11 @@
         key: API key, provided by TrackStat. <br>
         map: Name of map played on. <br>
         timeStamp: Current time in epoch (Unix time) format. <br>
-        teams: JSON with lists of team members (in the teams they are round 1)<br>
+        teams: JSON with lists of team members (in the teams they are in during round 1)<br>
         {
         <div class="tabulate">
-            CT: [steamIDs] <br>
-            T:  [steamIDs]
+            "CT": [steamIDs] <br>
+            "T":  [steamIDs]
         </div>
         }
     </div>
@@ -110,53 +118,46 @@
     Same as above, with additional GET variables:
     <div class="tabulate">
         rounds: JSON with list of all rounds of match <br>
-        {
-        <div class="tabulate">
-            [
+        [
             <div class="tabulate">
                 {
                 <div class="tabulate">
-                    winningSide: Name of side that won the round, "CT" or "T"<br>
-                    winningID: ID of winning team (se description note)<br>
-                    MVPID: steamID of the MVP.<br>
-                    timeStamp: Time in epoch (Unix time) format when the round ends.<br>
+                    "winningSide": Name of side that won the round, "CT" or "T"<br>
+                    "winningID": ID of winning team (se description note)<br>
+                    "MVPID": steamID of the MVP.<br>
+                    "timeStamp": Time in epoch (Unix time) format when the round ends.<br>
                 </div>
                 }
             </div>
             ]
-        </div>
-        }<br>
+        <br>
         kills: JSON with list of all kills in match <br>
-        <div class="tabulate">
             [
             <div class="tabulate">
                 {
                 <div class="tabulate">
-                    killerID: steamID of person getting the Kill<br>
-                    killedID: steamID of person being killed<br>
-                    weapon: Name of weapon used.<br>
-                    timeStamp: Time in epoch (Unix time) format of the kill.<br>
+                    "killerID": steamID of person getting the Kill<br>
+                    "killedID": steamID of person being killed<br>
+                    "weapon": Name of weapon used.<br>
+                    "timeStamp": Time in epoch (Unix time) format of the kill.<br>
                 </div>
                 }
             </div>
             ]
-        </div>
-        }<br>
+        <br>
         end: Time in epoch (Unix time) format when the match ends, i.e. same as last round.<br>
         suicides: [OPTIONAL!] JSON of list of suicides
+        [
         <div class="tabulate">
-            [
+            {
             <div class="tabulate">
-                {
-                <div class="tabulate">
-                    ID: steamID of person suiciding<br>
-                    timeStamp: Time in epoch (Unix time) format of the suicide.<br>
-                </div>
-                }
+                "ID": steamID of person suiciding<br>
+                "timeStamp": Time in epoch (Unix time) format of the suicide.<br>
             </div>
-            ]
+            }
         </div>
-        }<br>
+        ]
+        <br>
     </div>
 </div><br>
 
@@ -186,11 +187,11 @@
         json:<br>
         {
         <div class="tabulate">
-            killerID: steamID of person getting the Kill<br>
-            killedID: steamID of person being killed<br>
-            matchID: matchID of the match.<br>
-            weapon: Name of weapon used.<br>
-            timeStamp: Time in epoch (Unix time) format of the kill.<br>
+            "killerID": steamID of person getting the Kill<br>
+            "killedID": steamID of person being killed<br>
+            "matchID": matchID of the match.<br>
+            "weapon": Name of weapon used.<br>
+            "timeStamp": Time in epoch (Unix time) format of the kill.<br>
         </div>
         }
     </div>
@@ -210,7 +211,7 @@
 <div class="arguments collapsible"> GET variables:
     <div class="tabulate">
         key: API key provided by TrackStat. <br>
-        ID: steamID of person suiciding<br>
+        steamID: steamID of person suiciding<br>
         matchID: matchID of the match.<br>
         timeStamp: Time in epoch (Unix time) format of the suicide.<br>
     </div>
@@ -221,10 +222,11 @@
     json:<br>
     {
     <div class="tabulate">
-        ID: steamID of person suiciding<br>
-        matchID: matchID of the match.<br>
-        timeStamp: Time in epoch (Unix time) format of the suicide.<br>
+        "ID": steamID of person suiciding<br>
+        "matchID": matchID of the match.<br>
+        "timeStamp": Time in epoch (Unix time) format of the suicide.<br>
     </div>
+    }
 </div><br>
 
 <b>Try it</b><br>
@@ -243,7 +245,7 @@
         key: API key provided by TrackStat. <br>
         winningSide: Name of side that won the round, "CT" or "T"<br>
         winningID: ID of winning team (se description note)<br>
-        matchID: matchID of the match.
+        matchID: matchID of the match.<br>
         MVPID: steamID of the MVP.<br>
         timeStamp: Time in epoch (Unix time) format when the round ends.<br>
     </div>
@@ -254,12 +256,13 @@
     json:<br>
     {
     <div class="tabulate">
-        winningSide: Name of side that won the round, "CT" or "T"<br>
-        winningID: ID of winning team (se description note)<br>
-        matchID: matchID of the match.
-        MVPID: steamID of the MVP.<br>
-        timeStamp: Time in epoch (Unix time) format when the round ends.<br>
+        "winningSide": Name of side that won the round, "CT" or "T"<br>
+        "winningID": ID of winning team (se description note)<br>
+        "matchID": matchID of the match.<br>
+        "MVPID": steamID of the MVP.<br>
+        "timeStamp": Time in epoch (Unix time) format when the round ends.<br>
     </div>
+    }
 </div><br>
 
 <b>Try it</b><br>
@@ -276,7 +279,7 @@
 <div class="arguments collapsible"> GET variables:
     <div class="tabulate">
         key: API key provided by TrackStat. <br>
-        matchID: matchID of the match.
+        matchID: matchID of the match.<br>
         timeStamp: Time in epoch (Unix time) format when the match ends.<br>
     </div>
 </div><br>

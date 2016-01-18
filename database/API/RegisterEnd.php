@@ -11,7 +11,9 @@ if (isset($_GET["timeStamp"]) && isset($_GET["matchID"]) && isset($_GET["key"]))
 
 			$endStmt = $dbh->prepare("INSERT INTO `matchend` (TimeStamp, MatchID) VALUES (:end, :matchID)");
 			$endStmt->bindParam(":end", $_GET["timeStamp"]);
-			$endStmt->bindParam(":matchID", $matchID);
+			$endStmt->bindParam(":matchID", $_GET["matchID"]);
+
+			print "done";
 
 		} catch (PDOException $e)
 		{
@@ -20,8 +22,15 @@ if (isset($_GET["timeStamp"]) && isset($_GET["matchID"]) && isset($_GET["key"]))
 		}
 		$dbh = null;
 	}
+	else
+	{
+		print "Invalid key";
+	}
 }
-
+else
+{
+	print "Invalid arguments";
+}
 
 // Security leak. Anyone with a valid provider key can register a matchend
 // to any unended match by guessing their ID (which is AI, so can be easy)

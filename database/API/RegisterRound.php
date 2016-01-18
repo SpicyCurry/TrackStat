@@ -25,7 +25,9 @@ if ((isset($_GET["timeStamp"])&&isset($_GET["winningSide"])&&isset($_GET["matchI
 			$roundStmt->bindParam(":time", $argument["timeStamp"]);
 			$roundStmt->bindParam(":key", $_GET["key"]);
 
-			print($roundStmt->execute());
+			$roundStmt->execute();
+
+			print "done";
 
 		} catch (PDOException $e)
 		{
@@ -34,4 +36,12 @@ if ((isset($_GET["timeStamp"])&&isset($_GET["winningSide"])&&isset($_GET["matchI
 		}
 		$dbh = null;
 	}
+	else
+	{
+		print "Invalid key";
+	}
+}
+else
+{
+	print "Invalid arguments";
 }

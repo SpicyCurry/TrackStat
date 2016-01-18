@@ -30,3 +30,7 @@ if (isset($_GET["steamID"]))
 	}
 	$dbh = null;
 }
+else
+{
+	print "Invalid arguments";
+}

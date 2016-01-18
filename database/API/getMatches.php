@@ -1,5 +1,4 @@
 <?php
-session_start();
 if (isset($_GET["steamID"]) && isset($_GET["providerID"]))
 {
 	$ID = $_GET["steamID"];
@@ -22,9 +21,12 @@ if (isset($_GET["steamID"]) && isset($_GET["providerID"]))
 		$deathStmt->bindParam(":matchID", $matchID);
 		$deathStmt->bindParam(":ID", $ID);
 
-		$suicideStmt = $dbh->prepare("SELECT SteamID64, TimeStamp FROM suicide WHERE SteamID64=:ID");
+		$suicideStmt = $dbh->prepare("SELECT SteamID64, TimeStamp FROM suicide WHERE SteamID64=:ID AND MatchID=:matchID");
 		$suicideStmt->bindParam(":ID", $ID);
+		$suicideStmt->bindParam(":matchID", $matchID);
 
+		$endStmt = $dbh->prepare("SELECT TimeStamp FROM matchend WHERE MatchID=:matchID");
+		$endStmt->bindParam(":matchID", $matchID);
 
 		$matchesStmt = $dbh->prepare("
 SELECT
@@ -34,13 +36,10 @@ SELECT
 `match`.map,
 IF (`match`.TeamID_1=`team_has_user`.TeamID, `match`.TeamID_1, `match`.TeamID_2) AS FriendlyTeamID,
 IF (`match`.TeamID_2=`team_has_user`.TeamID, `match`.TeamID_1, `match`.TeamID_2) AS EnemyTeamID,
-`match`.Provider_Key,
-`matchend`.TimeStamp AS EndTime
+`match`.Provider_Key
 FROM `team_has_user`
 INNER JOIN `match`
 ON `team_has_user`.TeamID=`match`.TeamID_1 OR `team_has_user`.TeamID=`match`.TeamID_2
-INNER JOIN `matchend`
-ON `match`.MatchID=`matchend`.MatchID
 INNER JOIN `provider`
 ON `provider`.key = `match`.Provider_Key
 WHERE SteamID64 =:ID AND ProviderID =:providerID");
@@ -48,8 +47,17 @@ WHERE SteamID64 =:ID AND ProviderID =:providerID");
 		$matchesStmt->bindParam(":providerID", $providerID);
 		$matchesStmt->execute();
 		$array = [];
+
 		while ($result = $matchesStmt->fetch(PDO::FETCH_ASSOC))
 		{
+			$matchID = $result["MatchID"];
+
+			$endStmt->execute();
+			if ($endStmt->rowCount()==1)
+			{
+				$result["MatchEnd"]=$endStmt->fetch(PDO::FETCH_NUM)[0];
+			}
+
 			$result["Teams"] = [];
 			$teamID = $result["FriendlyTeamID"];
 			$teamStmt->execute();
@@ -59,7 +67,7 @@ WHERE SteamID64 =:ID AND ProviderID =:providerID");
 			$teamStmt->execute();
 			$result["Teams"]["Enemies"] = $teamStmt->fetch(PDO::FETCH_NUM);
 
-			$matchID = $result["MatchID"];
+
 			$roundStmt->execute();
 			$result["Rounds"] = $roundStmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -73,10 +81,10 @@ WHERE SteamID64 =:ID AND ProviderID =:providerID");
 			$result["Deaths"]["Suicide"] = $suicideStmt->fetchAll(PDO::FETCH_ASSOC);
 
 			array_push($array, $result);
-			print "<pre>";
-			print json_encode($array, JSON_PRETTY_PRINT);
-			print "</pre>";
 		}
+		print "<pre>";
+		print json_encode($array, JSON_PRETTY_PRINT);
+		print "</pre>";
 
 	} catch (PDOException $e)
 	{
@@ -84,4 +92,8 @@ WHERE SteamID64 =:ID AND ProviderID =:providerID");
 		die();
 	}
 	$dbh = null;
+}
+else
+{
+	print "Invalid arguments";
 }
