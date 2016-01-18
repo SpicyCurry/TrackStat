@@ -3,9 +3,9 @@
 
 <script src ="js/charting.js"></script>
 <br>
-<button class="statChooser" id="totalKills">Total Kills</button>
-<button class="statChooser" id="totalKillsVtotalDeaths">Total Kills and Deaths</button>
-<button class="statChooser" id="deltaKills">Kill difference</button>
+<button class="statChooser" id="total_kills">Total Kills</button>
+<button class="statChooser" id="total_kills/total_deaths">Total Kills and Deaths</button>
+<button class="statChooser" id="delta_kills">Kill difference</button>
 <button class="statChooser" id="K/D">K/D</button>
 <button class="statChooser" id="totalMvps">MVP's</button>
 <button class="statChooser" id="accp90">Accuracy-P90</button>
@@ -23,7 +23,7 @@
         getData("steam",$(this).attr("id"));
     });
 
-    getData('steam','totalKillsVtotalDeaths')
+    getData('steam','total_kills/total_deaths')
 </script>
 
 

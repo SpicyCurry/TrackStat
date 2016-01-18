@@ -1,0 +1,17 @@
+.collapsible
+{
+    display: none;
+    padding: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.tabulate
+{
+    padding-left: 40px;
+}
+
+input
+{
+    width: 500px;
+}
