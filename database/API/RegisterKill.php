@@ -15,7 +15,7 @@ if ((isset($_GET["killerID"])&& isset($_GET["killedID"]) && isset($_GET["timeSta
 		}
 		try
 		{
-			$dbh = new PDO('mysql:host=localhost;dbname=TrackStatDB', "root", "");
+			$dbh = new PDO('mysql:host=localhost;dbname=TrackStatDB', "root", "vikhram");
 			$killStmt = $dbh->prepare("INSERT INTO `kills` (SteamID64_Killer, SteamID64_Killed, TimeStamp, MatchID, Weapon, Provider_key) VALUES (:killerID, :killedID, :timeStamp, :matchID, :weapon, :key)");
 			$killStmt->bindParam(":killerID", $argument["killerID"]);
 			$killStmt->bindParam(":killedID", $argument["killedID"]);

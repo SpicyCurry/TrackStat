@@ -32,7 +32,7 @@ function updateSteamData()
 
 	try
 	{
-		$dbh = new PDO('mysql:host=localhost;dbname=TrackStatDB', "root", "");
+		$dbh = new PDO('mysql:host=localhost;dbname=TrackStatDB', "root", "vikhram");
 		$insertStmt = $dbh->prepare("INSERT INTO steam_data(SteamID64, TimeStamp, json) VALUES (:ID, :TimeStamp, :json)");
 		$insertStmt->bindParam(":ID", $ID);
 		$insertStmt->bindParam(":TimeStamp", $time);

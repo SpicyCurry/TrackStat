@@ -16,7 +16,7 @@ $winningside = "ct";
 $weapon = "ak-47";
 try
 {
-	$dbh = new PDO('mysql:host=localhost;dbname=TrackStatDB', "root", "");
+	$dbh = new PDO('mysql:host=localhost;dbname=TrackStatDB', "root", "vikhram");
 	$ProviderStmt = $dbh->prepare("INSERT INTO provider (ProviderID, `key`, ProviderName) VALUES (:providerID, :key, :providerName)");
 	$ProviderStmt->bindParam(":providerID", $providerID);
 	$ProviderStmt->bindParam(":key", $key);

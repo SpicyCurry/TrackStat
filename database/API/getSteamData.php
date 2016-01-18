@@ -4,7 +4,7 @@ if (isset($_GET["steamID"]))
 	$ID = $_GET["steamID"];
 	try
 	{
-		$dbh = new PDO('mysql:host=localhost;dbname=TrackStatDB', "root", "");
+		$dbh = new PDO('mysql:host=localhost;dbname=TrackStatDB', "root", "vikhram");
 
 		$selectStmt = $dbh->prepare("SELECT TimeStamp, json FROM steam_data WHERE SteamID64=:ID");
 		$selectStmt->bindParam(":ID", $ID);

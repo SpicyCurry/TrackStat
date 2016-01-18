@@ -4,7 +4,7 @@ if (isset($_GET["steamID"]))
 {
 	try
 	{
-		$dbh = new PDO('mysql:host=localhost;dbname=TrackStatDB', "root", "");
+		$dbh = new PDO('mysql:host=localhost;dbname=TrackStatDB', "root", "vikhram");
 
 		$findProviderStmt = $dbh->prepare("SELECT ProviderID, ProviderName FROM `user_has_provider` INNER JOIN provider ON provider.ProviderID = user_has_provider.Provider_ProviderID WHERE user_SteamID64=:ID");
 		$findProviderStmt->bindParam(":ID", $_GET["steamID"]);
