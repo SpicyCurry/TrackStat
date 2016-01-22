@@ -5,4 +5,6 @@ Collaborators:
 Vikhram Ravi (SpicyCurry) - vikrav-2  
 Claes Andersson (Fizzr)   - calane-2  
   
-blogsite: http://TrackStat.blogspot.se
+API demo avaliable in file demo.html
+ 
+Currently hosted at cloud-55.skelabb.ltu.se
